@@ -14,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import {RouterModule} from '@angular/router';
 import { AlertComponent } from './alert/alert.component';
 import {appRoutingModule} from './app.routing';
+import { ProfileComponent } from './user/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {appRoutingModule} from './app.routing';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    AlertComponent
+    AlertComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
