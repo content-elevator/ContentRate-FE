@@ -8,8 +8,13 @@ import {Observable} from 'rxjs';
 export class UserService {
 
   private baseUrl = 'http://localhost:4000';
+  private authorizationHeader: HttpHeaders;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const currentUser = localStorage.getItem('currentUser');
+    const token: Token = JSON.parse(currentUser).jwt;
+    this.authorizationHeader = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+  }
 
   register(user: User) {
     const username = user.username;
@@ -34,16 +39,15 @@ export class UserService {
     // tslint:disable-next-line:variable-name
     const last_name = user.last_name;
     const email = user.email;
-    console.log('registering user:' + last_name + ', ' + first_name);
-    // tslint:disable-next-line:max-line-length
-    return this.http.put(`${this.baseUrl}/userApi/v1/update`, {user: {email, first_name, last_name, username, password, password_confirmation}});
+    const options = {headers: this.authorizationHeader};
+
+    return this.http.put(`${this.baseUrl}/userApi/v1/update`,
+      {user: {email, first_name, last_name, username, password, password_confirmation}},
+      options);
   }
 
   getUser(): Observable<User> {
-    const currentUser = localStorage.getItem('currentUser');
-    const token: Token = JSON.parse(currentUser).jwt;
-    const header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    const options = {headers: header};
+    const options = {headers: this.authorizationHeader};
     return this.http.get<User>(`${this.baseUrl}/userApi/v1/my_user`, options);
   }
 }

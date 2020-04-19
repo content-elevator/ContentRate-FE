@@ -81,6 +81,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Saved successfully', true);
+          this.loading = false;
         },
         error => {
           this.alertService.error(error);
