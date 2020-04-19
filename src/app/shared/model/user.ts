@@ -2,8 +2,12 @@
   id: number;
   username: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  email: string
+  // tslint:disable-next-line:variable-name
+  password_confirmation: string;
+  // tslint:disable-next-line:variable-name
+  first_name: string;
+  // tslint:disable-next-line:variable-name
+  last_name: string;
+  email: string;
   token: string;
 }

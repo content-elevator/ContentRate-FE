@@ -1,4 +1,4 @@
-import {BehaviorSubject, config, Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {User} from '../model/user';
@@ -6,7 +6,7 @@ import {map} from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-  private baseUrl = 'http://127.0.0.1:8000';
+  private baseUrl = 'http://localhost:4000';
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
@@ -20,8 +20,8 @@ export class AuthenticationService {
   }
 
   login(username, password) {
-    console.log('sending login request')
-    return this.http.post<any>(`${this.baseUrl}/user/login`, { username, password })
+    console.log('sending login request');
+    return this.http.post<any>(`${this.baseUrl}/userApi/v1/sign_in`, { username, password })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         console.log('currentUser:' + JSON.stringify(user));
