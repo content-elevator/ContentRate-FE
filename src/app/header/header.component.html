@@ -6,13 +6,13 @@
   />
   <span>Content Rate</span>
   <div class="spacer"></div>
-  <div>
+  <div *ngIf="isLoggedIn()">
     <a routerLink="/" class="mr-4"><span>Home</span></a>
   </div>
-  <div>
+  <div *ngIf="isLoggedIn()">
     <a routerLink="/profile"><i class="fa fa-user fa-lg mr-4"></i></a>
   </div>
-  <div>
+  <div *ngIf="isLoggedIn()">
     <a (click)="logout()" routerLink="/login" class="mr-4"><span>Logout</span></a>
   </div>
 </div>

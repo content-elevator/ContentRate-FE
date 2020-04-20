@@ -8,13 +8,8 @@ import {Observable} from 'rxjs';
 export class UserService {
 
   private baseUrl = 'http://localhost:4000';
-  private authorizationHeader: HttpHeaders;
 
-  constructor(private http: HttpClient) {
-    const currentUser = localStorage.getItem('currentUser');
-    const token: Token = JSON.parse(currentUser).jwt;
-    this.authorizationHeader = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-  }
+  constructor(private http: HttpClient) {  }
 
   register(user: User) {
     const username = user.username;
@@ -39,15 +34,16 @@ export class UserService {
     // tslint:disable-next-line:variable-name
     const last_name = user.last_name;
     const email = user.email;
-    const options = {headers: this.authorizationHeader};
 
     return this.http.put(`${this.baseUrl}/userApi/v1/update`,
-      {user: {email, first_name, last_name, username, password, password_confirmation}},
-      options);
+      {user: {email, first_name, last_name, username, password, password_confirmation}});
   }
 
   getUser(): Observable<User> {
-    const options = {headers: this.authorizationHeader};
-    return this.http.get<User>(`${this.baseUrl}/userApi/v1/my_user`, options);
+    return this.http.get<User>(`${this.baseUrl}/userApi/v1/my_user`);
+  }
+
+  deleteUser() {
+    return this.http.delete(`${this.baseUrl}/userApi/v1/delete`);
   }
 }

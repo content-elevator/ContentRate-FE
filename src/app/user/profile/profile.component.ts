@@ -6,6 +6,7 @@ import {UserService} from '../../shared/service/registration.service';
 import {AlertService} from '../../shared/service/alert.service';
 import {first} from 'rxjs/operators';
 import {User} from '../../shared/model/user';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfileComponent implements OnInit {
   user: User;
   loading = false;
   submitted = false;
+  private currentUserSubject: BehaviorSubject<User>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,21 +51,12 @@ export class ProfileComponent implements OnInit {
         email: [this.user.email, Validators.required]
       });
     });
-    // console.log('returned user:' + this.user);
-    // this.registerForm = this.formBuilder.group({
-    //   first_name: [this.user.first_name, Validators.required],
-    //   last_name: [this.user.last_name, Validators.required],
-    //   username: [this.user.username, Validators.required],
-    //   password: ['', [Validators.required, Validators.minLength(6)]],
-    //   password_confirmation: ['', [Validators.required, Validators.minLength(6)]],
-    //   email: [this.user.email, Validators.required],
-    // });
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
 
-  onSubmit() {
+  onSubmitForm() {
     console.log('pressed update user');
     this.submitted = true;
 
@@ -82,6 +75,23 @@ export class ProfileComponent implements OnInit {
         data => {
           this.alertService.success('Saved successfully', true);
           this.loading = false;
+        },
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+        });
+  }
+
+  onDeleteUser() {
+    console.log('delete user');
+    this.userService.deleteUser()
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Deleted successfully', true);
+          this.loading = false;
+          this.authenticationService.logout();
+          this.router.navigate(['/login']);
         },
         error => {
           this.alertService.error(error);
