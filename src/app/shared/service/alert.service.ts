@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
-export class AlertService {
+export class AlertServiceee {
   private subject = new Subject<any>();
   private keepAfterRouteChange = false;
 

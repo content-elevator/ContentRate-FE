@@ -11,10 +11,11 @@ import {JwtInterceptorService} from './shared/service/jwt.interceptor.service';
 import {ErrorInterceptor} from './shared/service/error.interceptor.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
-import {RouterModule} from '@angular/router';
-import { AlertComponent } from './alert/alert.component';
 import {appRoutingModule} from './app.routing';
 import { ProfileComponent } from './user/profile/profile.component';
+import {ToastrModule} from 'ngx-toastr';
+import {UtilService} from './shared/service/util.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -24,18 +25,20 @@ import { ProfileComponent } from './user/profile/profile.component';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    AlertComponent,
     ProfileComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     appRoutingModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    UtilService
   ],
   bootstrap: [AppComponent]
 })

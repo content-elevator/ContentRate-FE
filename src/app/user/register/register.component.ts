@@ -3,8 +3,8 @@ import {first} from 'rxjs/operators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../shared/service/authentication.service';
-import {AlertService} from '../../shared/service/alert.service';
-import {UserService} from '../../shared/service/registration.service';
+import {UserService} from '../../shared/service/user.service';
+import {UtilService} from '../../shared/service/util.service';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private userService: UserService,
-    private alertService: AlertService
+    private utilService: UtilService
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.currentUserValue) {
@@ -45,27 +45,22 @@ export class RegisterComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
-    console.log('pressed register');
     this.submitted = true;
-
-    // reset alerts on submit
-    this.alertService.clear();
 
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
     }
-    console.log('before calling register');
     this.loading = true;
     this.userService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.success('Registration successful', true);
+          this.utilService.createToastrSuccess('', 'Registration successful');
           this.router.navigate(['/login']);
         },
         error => {
-          this.alertService.error(error);
+          this.utilService.createToastrError(error, 'ERROR');
           this.loading = false;
         });
   }

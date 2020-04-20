@@ -20,13 +20,10 @@ export class AuthenticationService {
   }
 
   login(username, password) {
-    console.log('sending login request');
     return this.http.post<any>(`${this.baseUrl}/userApi/v1/sign_in`, { username, password })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        console.log('currentUser:' + JSON.stringify(user));
         localStorage.setItem('currentUser', JSON.stringify(user));
-        console.log('received token: ' + user.jwt);
         this.currentUserSubject.next(user);
         return user;
       }));

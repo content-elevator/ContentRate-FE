@@ -17,8 +17,7 @@ export class HeaderComponent implements OnInit {
     return !!this.authService.currentUserValue;
   }
 
-  logout(){
-    console.log('logging out');
+  logout() {
     this.authService.logout();
   }
 
