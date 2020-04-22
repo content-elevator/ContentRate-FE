@@ -5,7 +5,6 @@ import {AuthenticationService} from '../../shared/service/authentication.service
 import {UserService} from '../../shared/service/user.service';
 import {first} from 'rxjs/operators';
 import {User} from '../../shared/model/user';
-import {BehaviorSubject} from 'rxjs';
 import {UtilService} from '../../shared/service/util.service';
 
 @Component({
@@ -16,10 +15,11 @@ import {UtilService} from '../../shared/service/util.service';
 export class ProfileComponent implements OnInit {
 
   registerForm: FormGroup;
+  changePasswordForm: FormGroup;
   user: User;
   loading = false;
   submitted = false;
-  private currentUserSubject: BehaviorSubject<User>;
+  submittedChangePassword = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,9 +34,13 @@ export class ProfileComponent implements OnInit {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       username: ['', Validators.required],
+      email: ['', Validators.required],
+    });
+
+    this.changePasswordForm = this.formBuilder.group({
+      old_password: ['', [Validators.required, Validators.minLength(6)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       password_confirmation: ['', [Validators.required, Validators.minLength(6)]],
-      email: ['', Validators.required],
     });
 
     this.userService.getUser().subscribe(result => {
@@ -45,17 +49,16 @@ export class ProfileComponent implements OnInit {
         first_name: [this.user.first_name, Validators.required],
         last_name: [this.user.last_name, Validators.required],
         username: [this.user.username, Validators.required],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        password_confirmation: ['', [Validators.required, Validators.minLength(6)]],
         email: [this.user.email, Validators.required]
       });
     });
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
+  get f1() { return this.registerForm.controls; }
+  get f2() { return this.changePasswordForm.controls; }
 
-  onSubmitForm() {
+  onSubmitEditProfileForm() {
     this.submitted = true;
 
     // stop here if form is invalid
@@ -66,29 +69,41 @@ export class ProfileComponent implements OnInit {
     this.userService.update(this.registerForm.value)
       .pipe(first())
       .subscribe(
-        data => {
+        () => {
           this.utilService.createToastrSuccess('', 'Saved successfully');
-          this.loading = false;
-        },
-        error => {
-          this.utilService.createToastrError(error, 'ERROR');
-          this.loading = false;
         });
+    this.loading = false;
   }
 
   onDeleteUser() {
     this.userService.deleteUser()
       .pipe(first())
       .subscribe(
-        data => {
+        () => {
           this.utilService.createToastrSuccess('', 'User profile deleted successfully');
-          this.loading = false;
           this.authenticationService.logout();
           this.router.navigate(['/login']);
-        },
-        error => {
-          this.utilService.createToastrError(error, 'ERROR');
-          this.loading = false;
         });
+    this.loading = false;
+  }
+
+  onSubmitChangePasswordForm() {
+    this.submittedChangePassword = true;
+
+    // stop here if form is invalid
+    if (this.changePasswordForm.invalid) {
+      return;
+    }
+    this.loading = true;
+    this.userService.updatePassword(this.changePasswordForm.value.old_password,
+      this.changePasswordForm.value.password, this.changePasswordForm.value.password_confirmation)
+      .pipe(first())
+      .subscribe(
+        () => {
+          this.utilService.createToastrSuccess('', 'New password saved successfully');
+        });
+    this.loading = false;
+    this.changePasswordForm.reset();
+    this.submittedChangePassword = false;
   }
 }

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {User} from '../model/user';
-import {Token} from '../model/token';
 import {Observable} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -27,8 +26,8 @@ export class UserService {
 
   update(user: User) {
     const username = user.username;
-    const password = user.password;
-    const password_confirmation = user.password_confirmation;
+    // const password = user.password;
+    // const password_confirmation = user.password_confirmation;
     // tslint:disable-next-line:variable-name
     const first_name = user.first_name;
     // tslint:disable-next-line:variable-name
@@ -36,7 +35,13 @@ export class UserService {
     const email = user.email;
 
     return this.http.put(`${this.baseUrl}/userApi/v1/update`,
-      {user: {email, first_name, last_name, username, password, password_confirmation}});
+      {user: {email, first_name, last_name, username}});
+  }
+
+  // tslint:disable-next-line:variable-name
+  updatePassword(old_password: string, password: string, password_confirmation: string) {
+    return this.http.put(`${this.baseUrl}/userApi/v1/update/password`,
+      {old_password, user: {password, password_confirmation}});
   }
 
   getUser(): Observable<User> {

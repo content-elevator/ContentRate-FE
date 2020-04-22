@@ -55,14 +55,10 @@ export class RegisterComponent implements OnInit {
     this.userService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
-        data => {
+        () => {
           this.utilService.createToastrSuccess('', 'Registration successful');
-          this.router.navigate(['/login']);
-        },
-        error => {
-          this.utilService.createToastrError(error, 'ERROR');
-          this.loading = false;
         });
+    this.loading = false;
   }
 
 }
