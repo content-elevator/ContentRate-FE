@@ -16,6 +16,7 @@ import { ProfileComponent } from './user/profile/profile.component';
 import {ToastrModule} from 'ngx-toastr';
 import {UtilService} from './shared/service/util.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
