@@ -1,1 +1,59 @@
-<p>home works!</p>
+<div class="container">
+  <form [formGroup]="analysisForm" (ngSubmit)="onSubmit()" class="text-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="form-group w-50">
+          <label for="url">URL</label>
+          <input type="text" formControlName="url" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.url.errors }"/>
+          <div *ngIf="submitted && f.url.errors" class="invalid-feedback">
+            <div *ngIf="f.url.errors.required">URL is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="form-group w-50">
+          <label for="query">Search query</label>
+          <input type="text" formControlName="query" class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.query.errors }"/>
+          <div *ngIf="submitted && f.query.errors" class="invalid-feedback">
+            <div *ngIf="f.query.errors.required">Search Query is required</div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="form-group row">
+          <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Analyse
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="container" [hidden]="!analysing">
+    <div class="container">
+      <div class="row container2">
+        <div class="progress2" style="width: 560px">
+          <div class="progress-track2"></div>
+          <div id="step1" class="progress-step2" [ngClass]="{'is-complete': step > 1, 'is-active': step === 1}">
+            <p class="font-weight-bold">Confirmed</p>
+          </div>
+          <div id="step2" class="progress-step2" [ngClass]="step > 2 ? 'is-complete': step === 2 ? 'is-active' : ''">
+            <p class="font-weight-bold">Waiting</p>
+          </div>
+          <div id="step3" class="progress-step2" [ngClass]="step > 3 ? 'is-complete': step === 3 ? 'is-active' : ''">
+            <p class="font-weight-bold">Scraping</p>
+          </div>
+          <div id="step4" class="progress-step2" [ngClass]="step > 4 ? 'is-complete': step === 4 ? 'is-active' : ''">
+            <p class="font-weight-bold">Analysing</p>
+          </div>
+          <div id="step5" class="progress-step2" [ngClass]="step > 5 ? 'is-complete': step === 5 ? 'is-active' : ''">
+            <p class="font-weight-bold">Completed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
