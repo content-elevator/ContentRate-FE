@@ -16,7 +16,9 @@ import { ProfileComponent } from './user/profile/profile.component';
 import {ToastrModule} from 'ngx-toastr';
 import {UtilService} from './shared/service/util.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { HistoryComponent } from './history/history.component';
+import { HistoryComponent } from './user/history/history.component';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { HistoryComponent } from './history/history.component';
   ],
   imports: [
     BrowserModule,
+    MatCardModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,

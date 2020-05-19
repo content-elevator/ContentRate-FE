@@ -1,0 +1,48 @@
+<mat-card>
+    <div>
+       ID
+    </div>
+    <div>
+        Query
+    </div>
+    <div>
+        Url
+    </div>
+    <div>
+        Score
+    </div>
+    <div>
+    Length
+    </div>
+    <div>
+        Average length
+    </div>
+    <div>
+        Created
+    </div>
+</mat-card>
+
+
+    <mat-card *ngFor="let gugu of history">
+        <div>
+            {{gugu.id}}
+        </div>
+        <div>
+            {{gugu.query}}
+        </div>
+        <div>
+            {{gugu.url}}
+        </div>
+        <div>
+            {{gugu.score}}
+        </div>
+        <div>
+            {{gugu.length}}
+        </div>
+        <div>
+            {{gugu.average_length}}
+        </div>
+        <div>
+            {{gugu.created_at | date}}
+        </div>
+    </mat-card> 
