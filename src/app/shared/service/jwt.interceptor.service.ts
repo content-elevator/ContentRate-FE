@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 
 @Injectable()
 export class JwtInterceptorService implements HttpInterceptor {
-  constructor(private authenticationService: AuthenticationService, private router: Router,) {
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

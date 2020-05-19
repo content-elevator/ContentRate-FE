@@ -51,4 +51,5 @@ export class UserService {
   deleteUser() {
     return this.http.delete(`${this.baseUrl}/userApi/v1/delete`);
   }
+
 }
