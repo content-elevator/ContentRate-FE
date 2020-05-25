@@ -1,6 +1,7 @@
 import {JobStatus} from './job.status';
 
 export class Job {
-  jobId: number;
-  status: JobStatus;
+  id: number;
+  // tslint:disable-next-line:variable-name
+  job_status: JobStatus;
 }

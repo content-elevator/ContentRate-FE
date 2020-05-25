@@ -5,6 +5,7 @@ import {first} from 'rxjs/operators';
 import {AnalysisService} from '../shared/service/analysis.service';
 import {interval, Subscription} from 'rxjs';
 import {AnalysisResult} from '../shared/model/analysis.result';
+import {JobStatus} from '../shared/model/job.status';
 
 @Component({
   selector: 'app-home',
@@ -13,13 +14,6 @@ import {AnalysisResult} from '../shared/model/analysis.result';
 })
 export class HomeComponent implements OnInit {
 
-  analysisForm: FormGroup;
-  step = 0;
-  analysing = false;
-  loading = false;
-  submitted = false;
-  analysisResult: AnalysisResult;
-
   constructor(
     private formBuilder: FormBuilder,
     private analysisService: AnalysisService,
@@ -27,16 +21,50 @@ export class HomeComponent implements OnInit {
   ) {
   }
 
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.analysisForm.controls;
+  }
+
+  analysisForm: FormGroup;
+  step = 0;
+  loading = false;
+  submitted = false;
+  analysisResult: AnalysisResult;
+
+  private static mapStep(step: JobStatus): number {
+    console.log('status:' + step.toString());
+    console.log('status:' + step);
+    switch (step.toString()) {
+      case JobStatus.CONFIRMED.toString():
+        console.log('returning 1');
+        return 1;
+      case JobStatus.IN_QUEUE.toString():
+        console.log('returning 2');
+        return 2;
+      case JobStatus.RECEIVED.toString():
+      case JobStatus.URL_SCRAPING_STARTED.toString():
+      case JobStatus.GOOGLE_SCRAPING_STARTED.toString():
+        console.log('returning 3');
+        return 3;
+      case JobStatus.ANALYSIS_STARTED.toString():
+      case JobStatus.SAVING.toString():
+        console.log('returning 4');
+        return 4;
+      case JobStatus.COMPLETED.toString():
+        console.log('returning 5');
+        return 5;
+      default:
+        return 1;
+
+    }
+  }
+
   ngOnInit(): void {
     this.analysisForm = this.formBuilder.group({
       url: ['', Validators.required],
       query: ['', Validators.required]
     });
-  }
-
-  // convenience getter for easy access to form fields
-  get f() {
-    return this.analysisForm.controls;
   }
 
   onSubmit() {
@@ -47,21 +75,20 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.analysing = true;
     this.loading = true;
 
     this.analysisService.analyse(this.f.url.value, this.f.query.value)
       .pipe(first())
       .subscribe(
         job => {
-          localStorage.setItem('jobId', job.jobId.toString());
+          localStorage.setItem('jobId', job.id.toString());
           this.step = 1;
           const repeat = interval(3000);
           const subscription = repeat.subscribe(
-            () => this.analysisService.getStatus(job.jobId)
+            () => this.analysisService.getStatus(job.id)
               .pipe(first())
               .subscribe(
-                update => this.updateStep(subscription, update.status, job.jobId)
+                update => this.updateStep(subscription, update.job_status, job.id)
               )
           );
           // tslint:disable-next-line:max-line-length
@@ -76,12 +103,13 @@ export class HomeComponent implements OnInit {
         });
   }
 
-  private updateStep(subscription: Subscription, step: number, jobId: number) {
-    this.step = step;
-    if (this.step < 5) {
-      this.step = this.step + 1;
+  private updateStep(subscription: Subscription, receivedStep: JobStatus, jobId: number) {
+    const step = HomeComponent.mapStep(receivedStep);
+    console.log('step:' + step);
+    if (step < 5) {
+      this.step = step;
     } else {
-      this.utilService.createToastrSuccess('The serve completed the analysis', '');
+      this.utilService.createToastrSuccess('The server completed the analysis', '');
       subscription.unsubscribe();
       this.stopAnalysis();
       this.analysisService.getResult(jobId)
@@ -96,7 +124,7 @@ export class HomeComponent implements OnInit {
   private stopAnalysis() {
     this.loading = false;
     this.step = 0;
-    this.analysing = false;
   }
+
 
 }
