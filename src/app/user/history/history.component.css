@@ -2,13 +2,12 @@ div{
     display: inline-block;
     width: 70px;
     height: 5px;
-    margin: 5px 25px;
-    padding: 10px;
- 
-}
-mat-card{ 
+    margin: 5px 22px;
     text-align: center;
     vertical-align: middle;
     object-fit: contain;
         
+}
+mat-card{
+ height: 90px;
 }
