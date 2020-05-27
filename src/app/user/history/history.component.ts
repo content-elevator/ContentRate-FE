@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HistoryService } from 'src/app/services/historyService';
+import { HistoryService } from 'src/app/shared/service/historyService';
 
 export interface HistoryModel {
   average_length: number,
