@@ -21,6 +21,7 @@ export class HistoryComponent implements OnInit {
   rows = [];
   history:HistoryModel[];
 
+
   constructor(private historyService: HistoryService) {
   }
 

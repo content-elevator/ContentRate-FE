@@ -24,9 +24,9 @@
     </mat-card>
 
 
-    <mat-card *ngFor="let gugu of history">     
+    <mat-card *ngFor="let gugu of history; let i = index">     
         <div>
-            {{gugu.id}}
+            {{i+1}}
         </div>
         <div>
             {{gugu.query}}
