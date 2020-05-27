@@ -1,36 +1,37 @@
-<mat-card>
-    <div>
-       ID
-    </div>
-    <div>
-        Query
-    </div>
-    <div>
-        Url
-    </div>
-    <div>
-        Score
-    </div>
-    <div>
-    Length
-    </div>
-    <div>
-        Average length
-    </div>
-    <div>
-        Created
-    </div>
-</mat-card>
+<div style="min-width: 1000px;">
+    <mat-card style="background-color: #297cd0; color:white">
+        <div>
+            ID
+        </div>
+        <div>
+            Query
+        </div>
+        <div style="width: 150px;">
+            Url
+        </div>
+        <div>
+            Score
+        </div>
+        <div>
+            Length
+        </div>
+        <div>
+            Average length
+        </div>
+        <div>
+            Created
+        </div>
+    </mat-card>
 
 
-    <mat-card *ngFor="let gugu of history">
+    <mat-card *ngFor="let gugu of history">     
         <div>
             {{gugu.id}}
         </div>
         <div>
             {{gugu.query}}
         </div>
-        <div>
+        <div style=" width: 150px; word-wrap: break-word;">
             {{gugu.url}}
         </div>
         <div>
@@ -46,3 +47,4 @@
             {{gugu.created_at | date}}
         </div>
     </mat-card> 
+</div>
