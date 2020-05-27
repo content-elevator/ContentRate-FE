@@ -6,7 +6,7 @@ import {map} from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-  private baseUrl = 'http://localhost:4000';
+  private baseUrl = 'https://elixir-user-management.gigalixirapp.com';
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 

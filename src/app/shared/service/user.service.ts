@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-  private baseUrl = 'http://localhost:4000';
+  private baseUrl = 'https://elixir-user-management.gigalixirapp.com';
 
   constructor(private http: HttpClient) {  }
 

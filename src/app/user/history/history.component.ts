@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HistoryService } from 'src/app/shared/service/history.service';
 
 export interface HistoryModel {
-  average_length: number,
+  average_length: number;
   created_at: string;
   id: number;
   length: number;
@@ -19,7 +19,7 @@ export interface HistoryModel {
 
 export class HistoryComponent implements OnInit {
   rows = [];
-  history:HistoryModel[];
+  history: HistoryModel[];
 
 
   constructor(private historyService: HistoryService) {
@@ -27,9 +27,9 @@ export class HistoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.historyService.getHistory()
-      .subscribe((data:HistoryModel[])=> {
-        this.history = data["data"];
+      .subscribe((data: HistoryModel[]) => {
+        this.history = data['data'];
         console.log(data["data"])
-      })
-  } 
+      });
+  }
 }
