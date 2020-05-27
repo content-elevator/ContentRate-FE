@@ -10,22 +10,20 @@ import {AnalysisResult} from '../model/analysis.result';
 @Injectable()
 export class AnalysisService {
 
-  private baseUrl = 'http://localhost:4000';
+  private baseUrl = 'https://analysis-service.herokuapp.com';
 
   constructor(private http: HttpClient) {
   }
 
   analyse(url: string, query: string) {
-    const params = new HttpParams()
-      .set('url', url)
-      .set('query', query);
-    return this.http.get<Job>(`${this.baseUrl}/blablabla/`, {params});
+    // TODO: delete
+    // tslint:disable-next-line:variable-name
+    const user_id = 0;
+    return this.http.post<Job>(`${this.baseUrl}/jobs/`, {user_id, url, query});
   }
 
   getStatus(jobId: number) {
-    const params = new HttpParams()
-      .set('jobID', jobId.toString());
-    return this.http.get<Job>(`${this.baseUrl}/blablabla/`, {params});
+    return this.http.get<Job>(`${this.baseUrl}/jobs/${jobId}`);
   }
 
   getResult(jobId: number) {

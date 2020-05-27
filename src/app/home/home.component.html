@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="form-group w-50">
-          <label for="url">URL</label>
+          <label>URL</label>
           <input type="text" formControlName="url" class="form-control"
                  [ngClass]="{ 'is-invalid': submitted && f.url.errors }"/>
           <div *ngIf="submitted && f.url.errors" class="invalid-feedback">
@@ -13,7 +13,7 @@
       </div>
       <div class="row justify-content-center">
         <div class="form-group w-50">
-          <label for="query">Search query</label>
+          <label>Search query</label>
           <input type="text" formControlName="query" class="form-control"
                  [ngClass]="{ 'is-invalid': submitted && f.query.errors }"/>
           <div *ngIf="submitted && f.query.errors" class="invalid-feedback">
@@ -32,7 +32,7 @@
     </div>
   </form>
 
-  <div class="container" [hidden]="!analysing">
+  <div class="container">
     <div class="container">
       <div class="row container2">
         <div class="progress2" style="width: 560px">
