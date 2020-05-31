@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
 
     this.loading = true;
 
-    this.analysisService.analyse(this.f.url.value, this.f.query.value)
+    const subscription = this.analysisService.analyse(this.f.url.value, this.f.query.value)
       .pipe(first())
       .subscribe(
         job => {
@@ -91,16 +91,17 @@ export class HomeComponent implements OnInit {
                 update => this.updateStep(subscription, update.job_status, job.id)
               )
           );
-          // tslint:disable-next-line:max-line-length
-          setTimeout(() => {
-            subscription.unsubscribe();
-            this.utilService.createToastrError('Server didn\'t responded. Please try again.', 'ERROR');
-            this.stopAnalysis();
-          }, 180000);
         },
         error => {
           this.loading = false;
         });
+    // tslint:disable-next-line:max-line-length
+    setTimeout(() => {
+      subscription.unsubscribe();
+      this.utilService.createToastrError('Server didn\'t responded. Please try again.', 'ERROR');
+      this.stopAnalysis();
+    }, 120000);
+
   }
 
   private updateStep(subscription: Subscription, receivedStep: JobStatus, jobId: number) {
