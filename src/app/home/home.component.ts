@@ -84,23 +84,23 @@ export class HomeComponent implements OnInit {
           localStorage.setItem('jobId', job.id.toString());
           this.step = 1;
           const repeat = interval(3000);
-          const subscription = repeat.subscribe(
+          const statusSubscription = repeat.subscribe(
             () => this.analysisService.getStatus(job.id)
               .pipe(first())
               .subscribe(
-                update => this.updateStep(subscription, update.job_status, job.id)
+                update => this.updateStep(statusSubscription, update.job_status, job.id)
               )
           );
+          // tslint:disable-next-line:max-line-length
+          setTimeout(() => {
+            statusSubscription.unsubscribe();
+            this.utilService.createToastrError('Server didn\'t responded. Please try again.', 'ERROR');
+            this.stopAnalysis();
+          }, 155000);
         },
         error => {
           this.loading = false;
         });
-    // tslint:disable-next-line:max-line-length
-    setTimeout(() => {
-      subscription.unsubscribe();
-      this.utilService.createToastrError('Server didn\'t responded. Please try again.', 'ERROR');
-      this.stopAnalysis();
-    }, 120000);
 
   }
 
