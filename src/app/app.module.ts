@@ -18,6 +18,8 @@ import {UtilService} from './shared/service/util.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HistoryComponent } from './user/history/history.component';
 import {MatCardModule} from '@angular/material/card';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { DiagramComponent } from './diagram/diagram.component';
 
 
 @NgModule({
@@ -29,7 +31,9 @@ import {MatCardModule} from '@angular/material/card';
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    HistoryComponent
+    HistoryComponent,
+    DiagramComponent
+
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,8 @@ import {MatCardModule} from '@angular/material/card';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    appRoutingModule
+    appRoutingModule,
+    NgApexchartsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorService, multi: true },
