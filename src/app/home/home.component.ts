@@ -6,6 +6,7 @@ import {AnalysisService} from '../shared/service/analysis.service';
 import {interval, Subscription} from 'rxjs';
 import {AnalysisResult} from '../shared/model/analysis.result';
 import {JobStatus} from '../shared/model/job.status';
+import {Job} from '../shared/model/job';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,8 @@ export class HomeComponent implements OnInit {
   step = 0;
   loading = false;
   submitted = false;
-  analysisResult: AnalysisResult;
+  analysisResult: Job;
+  hideResult = true;
 
   private static mapStep(step: JobStatus): number {
     console.log('status:' + step.toString());
@@ -85,7 +87,7 @@ export class HomeComponent implements OnInit {
           this.step = 1;
           const repeat = interval(3000);
           const statusSubscription = repeat.subscribe(
-            () => this.analysisService.getStatus(job.id)
+            () => this.analysisService.getResult(job.id)
               .pipe(first())
               .subscribe(
                 update => this.updateStep(statusSubscription, update.job_status, job.id)
@@ -117,7 +119,9 @@ export class HomeComponent implements OnInit {
         .pipe(first())
         .subscribe(
           result => {
+            console.log(result);
             this.analysisResult = result;
+            this.hideResult = false;
           });
     }
   }

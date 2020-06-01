@@ -22,13 +22,7 @@ export class AnalysisService {
     return this.http.post<Job>(`${this.baseUrl}/jobs/`, {user_id, url, query});
   }
 
-  getStatus(jobId: number) {
-    return this.http.get<Job>(`${this.baseUrl}/jobs/${jobId}`);
-  }
-
   getResult(jobId: number) {
-    const params = new HttpParams()
-      .set('jobID', jobId.toString());
-    return this.http.get<AnalysisResult>(`${this.baseUrl}/blablabla/`, {params});
+    return this.http.get<Job>(`${this.baseUrl}/jobs/${jobId}`);
   }
 }
