@@ -7,6 +7,7 @@ import {interval, Subscription} from 'rxjs';
 import {AnalysisResult} from '../shared/model/analysis.result';
 import {JobStatus} from '../shared/model/job.status';
 import {Job} from '../shared/model/job';
+import Timeout = NodeJS.Timeout;
 
 @Component({
   selector: 'app-home',
@@ -70,6 +71,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
+    this.step = 0;
     this.submitted = true;
 
     // stop here if form is invalid
@@ -85,20 +87,20 @@ export class HomeComponent implements OnInit {
         job => {
           localStorage.setItem('jobId', job.id.toString());
           this.step = 1;
+          // tslint:disable-next-line:max-line-length
+          const timeout = setTimeout(() => {
+            statusSubscription.unsubscribe();
+            this.utilService.createToastrError('Server didn\'t respond. Please try again.', 'ERROR');
+            this.stopAnalysis(timeout);
+          }, 155000);
           const repeat = interval(3000);
           const statusSubscription = repeat.subscribe(
             () => this.analysisService.getResult(job.id)
               .pipe(first())
               .subscribe(
-                update => this.updateStep(statusSubscription, update.job_status, job.id)
+                update => this.updateStep(statusSubscription, timeout, update.job_status, job.id)
               )
           );
-          // tslint:disable-next-line:max-line-length
-          setTimeout(() => {
-            statusSubscription.unsubscribe();
-            this.utilService.createToastrError('Server didn\'t responded. Please try again.', 'ERROR');
-            this.stopAnalysis();
-          }, 155000);
         },
         error => {
           this.loading = false;
@@ -106,7 +108,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  private updateStep(subscription: Subscription, receivedStep: JobStatus, jobId: number) {
+  private updateStep(subscription: Subscription, timeout: Timeout, receivedStep: JobStatus, jobId: number) {
     const step = HomeComponent.mapStep(receivedStep);
     console.log('step:' + step);
     if (step < 5) {
@@ -114,7 +116,7 @@ export class HomeComponent implements OnInit {
     } else {
       this.utilService.createToastrSuccess('The server completed the analysis', '');
       subscription.unsubscribe();
-      this.stopAnalysis();
+      this.stopAnalysis(timeout);
       this.analysisService.getResult(jobId)
         .pipe(first())
         .subscribe(
@@ -126,9 +128,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private stopAnalysis() {
+  private stopAnalysis(timeout: Timeout) {
     this.loading = false;
-    this.step = 0;
+    clearTimeout(timeout);
   }
 
 
