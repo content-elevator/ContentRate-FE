@@ -1,0 +1,26 @@
+<div class="container">
+  <dl class="container">
+    <div class="row d-flex justify-content-center">
+      <dt class="col">Word count user:</dt>
+      <dd class="col">{{wcUser}}</dd>
+    </div>
+    <div class="row d-flex justify-content-center">
+      <dt class="col">Word count google:</dt>
+      <dd class="col">{{wcGoogle}}</dd>
+    </div>
+    <div class="row d-flex justify-content-center">
+      <dt class="col">Tfidf score:</dt>
+      <dd class="col">{{tfidfScore}}</dd>
+    </div>
+  </dl>
+  <div id="chart">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [plotOptions]="chartOptions.plotOptions"
+      [xaxis]="chartOptions.xaxis"
+      [stroke]="chartOptions.stroke"
+    ></apx-chart>
+  </div>
+</div>

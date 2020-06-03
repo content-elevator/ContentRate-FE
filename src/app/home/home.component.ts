@@ -6,6 +6,8 @@ import {AnalysisService} from '../shared/service/analysis.service';
 import {interval, Subscription} from 'rxjs';
 import {AnalysisResult} from '../shared/model/analysis.result';
 import {JobStatus} from '../shared/model/job.status';
+import {Job} from '../shared/model/job';
+import Timeout = NodeJS.Timeout;
 
 @Component({
   selector: 'app-home',
@@ -30,7 +32,8 @@ export class HomeComponent implements OnInit {
   step = 0;
   loading = false;
   submitted = false;
-  analysisResult: AnalysisResult;
+  analysisResult: Job;
+  hideResult = true;
 
   private static mapStep(step: JobStatus): number {
     console.log('status:' + step.toString());
@@ -68,6 +71,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit() {
+    this.step = 0;
     this.submitted = true;
 
     // stop here if form is invalid
@@ -77,33 +81,34 @@ export class HomeComponent implements OnInit {
 
     this.loading = true;
 
-    this.analysisService.analyse(this.f.url.value, this.f.query.value)
+    const subscription = this.analysisService.analyse(this.f.url.value, this.f.query.value)
       .pipe(first())
       .subscribe(
         job => {
           localStorage.setItem('jobId', job.id.toString());
           this.step = 1;
+          // tslint:disable-next-line:max-line-length
+          const timeout = setTimeout(() => {
+            statusSubscription.unsubscribe();
+            this.utilService.createToastrError('Server didn\'t respond. Please try again.', 'ERROR');
+            this.stopAnalysis(timeout);
+          }, 155000);
           const repeat = interval(3000);
-          const subscription = repeat.subscribe(
-            () => this.analysisService.getStatus(job.id)
+          const statusSubscription = repeat.subscribe(
+            () => this.analysisService.getResult(job.id)
               .pipe(first())
               .subscribe(
-                update => this.updateStep(subscription, update.job_status, job.id)
+                update => this.updateStep(statusSubscription, timeout, update.job_status, job.id)
               )
           );
-          // tslint:disable-next-line:max-line-length
-          setTimeout(() => {
-            subscription.unsubscribe();
-            this.utilService.createToastrError('Server didn\'t responded. Please try again.', 'ERROR');
-            this.stopAnalysis();
-          }, 180000);
         },
         error => {
           this.loading = false;
         });
+
   }
 
-  private updateStep(subscription: Subscription, receivedStep: JobStatus, jobId: number) {
+  private updateStep(subscription: Subscription, timeout: Timeout, receivedStep: JobStatus, jobId: number) {
     const step = HomeComponent.mapStep(receivedStep);
     console.log('step:' + step);
     if (step < 5) {
@@ -111,19 +116,21 @@ export class HomeComponent implements OnInit {
     } else {
       this.utilService.createToastrSuccess('The server completed the analysis', '');
       subscription.unsubscribe();
-      this.stopAnalysis();
+      this.stopAnalysis(timeout);
       this.analysisService.getResult(jobId)
         .pipe(first())
         .subscribe(
           result => {
+            console.log(result);
             this.analysisResult = result;
+            this.hideResult = false;
           });
     }
   }
 
-  private stopAnalysis() {
+  private stopAnalysis(timeout: Timeout) {
     this.loading = false;
-    this.step = 0;
+    clearTimeout(timeout);
   }
 
 
