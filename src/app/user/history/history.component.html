@@ -24,7 +24,7 @@
     </mat-card>
 
 
-    <mat-card *ngFor="let gugu of history; let i = index">     
+    <mat-card *ngFor="let gugu of history.reverse(); let i = index">
         <div>
             {{i+1}}
         </div>
@@ -46,5 +46,5 @@
         <div>
             {{gugu.created_at | date}}
         </div>
-    </mat-card> 
+    </mat-card>
 </div>
