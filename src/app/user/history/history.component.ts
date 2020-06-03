@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { HistoryService } from 'src/app/shared/service/history.service';
+import {Component, OnInit} from '@angular/core';
+import {HistoryService} from 'src/app/shared/service/history.service';
 
 export interface HistoryModel {
   average_length: number;
@@ -11,6 +11,7 @@ export interface HistoryModel {
   url: string;
   user_id: number;
 }
+
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -29,7 +30,8 @@ export class HistoryComponent implements OnInit {
     this.historyService.getHistory()
       .subscribe((data: HistoryModel[]) => {
         this.history = data['data'];
-        console.log(data["data"])
+        this.history = this.history.reverse();
+        console.log(data['data'])
       });
   }
 }
