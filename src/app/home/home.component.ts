@@ -4,7 +4,6 @@ import {UtilService} from '../shared/service/util.service';
 import {first} from 'rxjs/operators';
 import {AnalysisService} from '../shared/service/analysis.service';
 import {interval, Subscription} from 'rxjs';
-import {AnalysisResult} from '../shared/model/analysis.result';
 import {JobStatus} from '../shared/model/job.status';
 import {Job} from '../shared/model/job';
 import Timeout = NodeJS.Timeout;
@@ -91,6 +90,7 @@ export class HomeComponent implements OnInit {
           const timeout = setTimeout(() => {
             statusSubscription.unsubscribe();
             this.utilService.createToastrError('Server didn\'t respond. Please try again.', 'ERROR');
+            this.step = 0;
             this.stopAnalysis(timeout);
           }, 155000);
           const repeat = interval(3000);
@@ -115,6 +115,7 @@ export class HomeComponent implements OnInit {
       this.step = step;
     } else {
       this.utilService.createToastrSuccess('The server completed the analysis', '');
+      this.step = step;
       subscription.unsubscribe();
       this.stopAnalysis(timeout);
       this.analysisService.getResult(jobId)
