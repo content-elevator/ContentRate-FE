@@ -6,8 +6,11 @@ div{
     text-align: center;
     vertical-align: middle;
     object-fit: contain;
-        
+
 }
 mat-card{
  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
