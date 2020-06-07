@@ -19,7 +19,7 @@
   <div class="form-group">
     <label for="username">Username</label>
     <input type="text" formControlName="username" class="form-control" id="username"
-           [ngClass]="{ 'is-invalid': submitted && f1.username.errors }"/>
+           [ngClass]="{ 'is-invalid': submitted && f1.username.errors }" [attr.disabled]="true"/>
     <div *ngIf="submitted && f1.username.errors" class="invalid-feedback">
       <div *ngIf="f1.username.errors.required">Username is required</div>
     </div>

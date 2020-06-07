@@ -59,6 +59,7 @@ export class RegisterComponent implements OnInit {
           this.utilService.createToastrSuccess('', 'Registration successful');
         });
     this.loading = false;
+    this.router.navigate(['/login']);
   }
 
 }
